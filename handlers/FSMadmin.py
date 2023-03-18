@@ -59,6 +59,12 @@ async def load_direction(message: types.Message, state: FSMContext):
 async def load_group(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['group'] = message.text
+        photo1 = open('media/meme.jpg', "rb")
+        await message.answer_photo(
+                        photo=photo1,
+                         caption=f"{data['name']} {data['age']} {data['gruop']} {data['direction']}\n"
+                                 f"@{data['id']}"
+                     )
     await FSMAdmin.next()
     await message.answer("отлично?", reply_markup=client_kb.submit_markup)
 
@@ -100,6 +106,7 @@ def register_handlers_fsm_anketa(dp: Dispatcher):
                                 Text(equals="cancel", ignore_case=True), state='*')
 
     dp.register_message_handler(fsm_start, commands=['reg'])
+    dp.register_message_handler(load_id, state=FSMAdmin.id1)
     dp.register_message_handler(load_name, state=FSMAdmin.name)
     dp.register_message_handler(load_age, state=FSMAdmin.age)
     dp.register_message_handler(load_direction, state=FSMAdmin.direction)
